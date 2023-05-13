@@ -3,11 +3,9 @@ export default function TextForm(props){
     const[text,setText] = useState("");      //helementps to give us a Variable and Function asosiated with each other; to update variable's text you must need to use Function for it which you made; this known as UseState-Hook.
     const[preview,setPreview] = useState(text);
 
-    let[wordCount,setWordCount]=useState(0)
+    // let[wordCount,setWordCount]=useState(0)
     const handleOnChange=(event)=>{
         setText(event.target.value);
-        if(text===""){setWordCount(0)}
-        setWordCount(text.split(/\s+/).length)
     }
 
     const uppercase=()=>{
@@ -105,7 +103,7 @@ export default function TextForm(props){
             let substring = text.substring(i,i+limit)
             if( i > ((text.length-1)-limit) ){                // for last-line
                 substring = text.substring(i,text.length-1)
-            }else if(text[i+limit] == ' ' ){              // if line has its last word.
+            }else if(text[i+limit] === ' ' ){              // if line has its last word.
                 EndSpaceIndex = limit
                 substring = text.substring(i,i+EndSpaceIndex)
             }else{
@@ -125,7 +123,7 @@ export default function TextForm(props){
             let substring = text.substring(i,i+limit)
             if( i > ((text.length-1)-limit) ){                // for last-line
                 substring = text.substring(i,text.length-1)
-            }else if(text[i+limit] == ' ' ){              // if line has its last word.
+            }else if(text[i+limit] === ' ' ){              // if line has its last word.
                 EndSpaceIndex = limit
                 substring = text.substring(i,i+EndSpaceIndex)
             }else{
@@ -144,16 +142,16 @@ export default function TextForm(props){
                     <div className='an=3'>
                         <textarea style={{whiteSpace:'nowrap'}} placeholder='Enter text here...' className='form-control' value={text} onChange={handleOnChange} id='myBox' rows='6'></textarea>
                     </div>
-                    <button className='btn btn-primary my-2'onMouseOver={uppercase_onMouseHover} onMouseLeave={onMouseLeave} onClick={uppercase}>Uppercase</button>
-                    <button className='btn btn-primary my-2 mx-2' onMouseOver={lowercase_onMouseHover} onMouseLeave={onMouseLeave} onClick={lowercase}>Lowercase</button>
-                    <button className='btn btn-primary my-2 mx-2' onMouseOver={clearExtraSpaces_onMouseHover} onMouseLeave={onMouseLeave} onClick={clearExtraSpaces}>Clear-Extra-Spaces</button>
-                    <button className='btn btn-primary my-2 mx-2' onMouseOver={paragraph_onMouseHover} onMouseLeave={onMouseLeave} onClick={paragraph}>paragraph</button>
-                    <button className='btn btn-primary my-2 mx-2' onMouseOver={sortInLine_onMouseHover} onMouseLeave={onMouseLeave} onClick={sortInLine}>sortInLine</button>
-                    <button className='btn btn-primary my-2 mx-2' onMouseOver={wordWrap_onMouseHover} onMouseLeave={onMouseLeave} onClick={wordWrap}>wordWrap</button>
+                    <button disabled={text.length===0} className='btn btn-primary my-2'onMouseOver={uppercase_onMouseHover} onMouseLeave={onMouseLeave} onClick={uppercase}>Uppercase</button>
+                    <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={lowercase_onMouseHover} onMouseLeave={onMouseLeave} onClick={lowercase}>Lowercase</button>
+                    <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={clearExtraSpaces_onMouseHover} onMouseLeave={onMouseLeave} onClick={clearExtraSpaces}>Clear-Extra-Spaces</button>
+                    <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={paragraph_onMouseHover} onMouseLeave={onMouseLeave} onClick={paragraph}>paragraph</button>
+                    <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={sortInLine_onMouseHover} onMouseLeave={onMouseLeave} onClick={sortInLine}>sortInLine</button>
+                    <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={wordWrap_onMouseHover} onMouseLeave={onMouseLeave} onClick={wordWrap}>wordWrap</button>
                 </div>
                 <div className='container my-4' style={props.mode}>
                     <h2 style={{padding:"15px"}}>Your Text summary</h2>
-                    <p style={{padding:"15px",paddingTop:"0"}}> {wordCount} and {text.length} charecters</p>
+                    <p style={{padding:"15px",paddingTop:"0"}}> {text.split(/\s+/).filter((element)=>{return element.length !== 0}).length} words and {text.length} charecters</p>
                 </div>
                 <div className="container">
                     <h2 style={props.mode}>preview</h2>
