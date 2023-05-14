@@ -95,9 +95,8 @@ export default function TextForm(props){
     }
 
     
-    function wordWrap(){
+    function wordWrap(limit){
         let newStr=[]
-        let limit = 50
         let EndSpaceIndex = 0
         for(let i=0; i<text.length; i+=EndSpaceIndex){
             let substring = text.substring(i,i+limit)
@@ -115,9 +114,8 @@ export default function TextForm(props){
         setText(newStr.join('\n'))
     }
     
-    function wordWrap_onMouseHover(){
+    function wordWrap_onMouseHover(limit){
         let newStr=[]
-        let limit = 50
         let EndSpaceIndex = 0
         for(let i=0; i<text.length; i+=EndSpaceIndex){
             let substring = text.substring(i,i+limit)
@@ -147,7 +145,7 @@ export default function TextForm(props){
                     <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={clearExtraSpaces_onMouseHover} onMouseLeave={onMouseLeave} onClick={clearExtraSpaces}>Clear-Extra-Spaces</button>
                     <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={paragraph_onMouseHover} onMouseLeave={onMouseLeave} onClick={paragraph}>paragraph</button>
                     <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={sortInLine_onMouseHover} onMouseLeave={onMouseLeave} onClick={sortInLine}>sortInLine</button>
-                    <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={wordWrap_onMouseHover} onMouseLeave={onMouseLeave} onClick={wordWrap}>wordWrap</button>
+                    <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={()=>{wordWrap_onMouseHover(50)}} onMouseLeave={onMouseLeave} onClick={()=>{wordWrap(50)}}>wordWrap</button>
                 </div>
                 <div className='container my-4' style={props.mode}>
                     <h2 style={{padding:"15px"}}>Your Text summary</h2>
