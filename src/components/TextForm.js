@@ -3,9 +3,9 @@ export default function TextForm(props){
     const[text,setText] = useState("");      //helementps to give us a Variable and Function asosiated with each other; to update variable's text you must need to use Function for it which you made; this known as UseState-Hook.
     const[preview,setPreview] = useState(text);
 
-    // let[wordCount,setWordCount]=useState(0)
     const handleOnChange=(event)=>{
         setText(event.target.value);
+        setPreview(event.target.value);
     }
 
     const uppercase=()=>{
@@ -78,7 +78,16 @@ export default function TextForm(props){
     }
     
     const sortInLine=()=>{
-        setText(text.split('.').join('.\n'))
+        let newText = text.split('.')
+        newText=newText.map((element,index)=>{
+            element=element.trim()
+            let part1ofString = element.charAt(0).toUpperCase()
+            let part2ofString = element.slice(1).toLocaleLowerCase()
+            element = part1ofString + part2ofString;
+            return element
+        })
+        newText = newText.join('.\n')
+        setText(newText)
     }
     const sortInLine_onMouseHover=()=>{
         let newText = text.split('.')
@@ -96,9 +105,10 @@ export default function TextForm(props){
 
     
     function wordWrap(){
+        if(text.includes(' ')){
         let newStr=[]
-        let limit = 50 
         let EndSpaceIndex = 0
+        const limit = 50;
         for(let i=0; i<text.length; i+=EndSpaceIndex){
             let substring = text.substring(i,i+limit)
             if( i > ((text.length-1)-limit) ){                // for last-line
@@ -114,26 +124,30 @@ export default function TextForm(props){
         }
         setText(newStr.join('\n'))
     }
-    
+    } 
     function wordWrap_onMouseHover(){
+        if(text.length<50 && 3>(text.split(' ').length-1)) {
+            setPreview(text)
+        }
         let newStr=[]
         let EndSpaceIndex = 0
-        let limit = 50
-        for(let i=0; i<text.length; i+=EndSpaceIndex){
-            let substring = text.substring(i,i+limit)
-            if( i > ((text.length-1)-limit) ){                // for last-line
-                substring = text.substring(i,text.length-1)
-            }else if(text[i+limit] === ' ' ){              // if line has its last word.
-                EndSpaceIndex = limit
-                substring = text.substring(i,i+EndSpaceIndex)
-            }else{
-                EndSpaceIndex = substring.lastIndexOf(' ')          // if last word is'nt complete
-                substring = text.substring(i,i+EndSpaceIndex)
+        const limit = 50;
+            for(let i=0; i<text.length; i+=EndSpaceIndex){
+                let substring = text.substring(i,i+limit)
+                if( i > ((text.length-1)-limit) ){                // for last-line
+                    substring = text.substring(i,text.length-1)
+                }else if(text[i+limit] === ' ' ){              // if line has its last word.
+                    EndSpaceIndex = limit
+                    substring = text.substring(i,i+EndSpaceIndex)
+                }else{
+                    EndSpaceIndex = substring.lastIndexOf(' ')          // if last word is'nt complete
+                    substring = text.substring(i,i+EndSpaceIndex)
+                }
+                newStr.push(substring)
             }
-            newStr.push(substring)
-        }
-        setPreview(newStr.join('\n'))
+            setPreview(newStr.join('\n'))
     }
+    console.log(text.length)
     return(
         <>
             <div id='home'>
@@ -147,16 +161,16 @@ export default function TextForm(props){
                     <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={clearExtraSpaces_onMouseHover} onMouseLeave={onMouseLeave} onClick={clearExtraSpaces}>Clear-Extra-Spaces</button>
                     <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={paragraph_onMouseHover} onMouseLeave={onMouseLeave} onClick={paragraph}>paragraph</button>
                     <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={sortInLine_onMouseHover} onMouseLeave={onMouseLeave} onClick={sortInLine}>sortInLine</button>
-                    <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={wordWrap_onMouseHover} onMouseLeave={onMouseLeave} onClick={wordWrap}>wordWrap</button>
+                    {/* <button disabled={text.length===0} className='btn btn-primary my-2 mx-2' onMouseOver={wordWrap_onMouseHover} onMouseLeave={onMouseLeave} onClick={wordWrap}>wordWrap</button> */}
                 </div>
                 <div className='container my-4' style={props.mode}>
                     <h2 style={{padding:"15px"}}>Your Text summary</h2>
-                    <p style={{padding:"15px",paddingTop:"0"}}> {text.split(/\s+/).filter((element)=>{return element.length !== 0}).length} words and {text.length} charecters</p>
+                    <p style={{padding:"15px",paddingTop:"0"}}> {text.split(/\s+/).filter((element)=>{return element.length !== 0}).length} words and {text.split(/\s+/).join('').length} charecters</p>
                 </div>
                 <div className="container">
                     <h2 style={props.mode}>preview</h2>
                     <div className='an=3'>
-                        <textarea style={{whiteSpace:'nowrap',border:0}} className='form-control' onChange={(event)=>{setText(event.target.value)}} id='previewBox' value={preview} rows='6'></textarea>
+                        <textarea style={{whiteSpace:'nowrap',border:0}} className='form-control' onChange={handleOnChange} id='previewBox' value={preview} rows='6'></textarea>
                     </div>
                 </div>
             </div>
